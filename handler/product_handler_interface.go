@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type CategoryHandler interface {
+type ProductHandler interface {
 	FindAll(c echo.Context) error
 	FindById(c echo.Context) error
 	FindByCategoryId(c echo.Context) error

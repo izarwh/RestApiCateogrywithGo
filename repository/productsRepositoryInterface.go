@@ -6,7 +6,7 @@ import (
 	"prrestapi/model/domain"
 )
 
-type CategoryRepositoryInterface interface {
+type ProductRepositoryInterface interface {
 	FindAll(ctx context.Context, tx *sql.Tx) []domain.Products
 	FindById(ctx context.Context, tx *sql.Tx, id int) domain.Products
 	FindByCategoryId(ctx context.Context, tx *sql.Tx, catId int) []domain.Products

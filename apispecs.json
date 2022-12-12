@@ -7,15 +7,27 @@
     "servers": [{ "url": "http://localhost:3333/api" }],
     "components": {
         "schemas": {
+            "templateProdResponse": {
+                "type": "object",
+                
+                    "properties": {
+                        "id": {
+                            "type": "number"
+                        },
+                        "category_id": {
+                            "type": "number"
+                        },
+                        "nama": {
+                            "type": "string"
+                        }
+                    }
+            },
             "templateCatResponse": {
                 "type": "object",
                 "items": {
                     "type": "object",
                     "properties": {
                         "id": {
-                            "type": "number"
-                        },
-                        "category_id":{
                             "type": "number"
                         },
                         "nama": {
@@ -65,6 +77,316 @@
                                                         "type": "number"
                                                     },
                                                     "category_id":{
+                                                        "type":"number"},
+                                                    "nama": {
+                                                        "type": "string"
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "description": "create new category",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "category_id": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success create new category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/templateProdResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "number"
+                                    },
+                                    "category_id": {
+                                        "type": "number"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success put",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/templateProdResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "description": "Delete categories",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success delete",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number"
+                                                    },
+                                                    "categoryId": {
+                                                        "type": "number"
+                                                    },
+                                                    "nama": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{productId}": {
+            "get": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "description": "get product by id",
+                "parameters": [
+                    {
+                        "required": true,
+                        "name": "productId",
+                        "description": "product id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success put",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "category_id": {
+                                                    "type": "number"
+                                                },
+                                                "nama": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{category_id}": {
+            "get": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "description": "get category by id",
+                "parameters": [
+                    {
+                        "required": true,
+                        "name": "category_id",
+                        "description": "category id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success put",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "category_id": {
+                                                    "type": "number"
+                                                },
+                                                "nama": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success api",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
                                                         "type": "number"
                                                     },
                                                     "nama": {
@@ -95,9 +417,6 @@
                                 "properties": {
                                     "name": {
                                         "type": "string"
-                                    },
-                                    "category_id":{
-                                        "type": "number"
                                     }
                                 }
                             }
@@ -141,10 +460,7 @@
                                 "type": "object",
                                 "properties": {
                                     "id": {
-                                        "type": "number"
-                                    },
-                                    "category_id":{
-                                        "type": "number"
+                                        "type": "integer"
                                     },
                                     "name": {
                                         "type": "string"
@@ -201,7 +517,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "success delete",
+                        "description": "success delte",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -221,7 +537,59 @@
                                                     "id": {
                                                         "type": "number"
                                                     },
-                                                    "categoryId":{
+                                                    "nama": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{categoryId}": {
+            "get": {
+                "security": [
+                    {
+                        "Auth": []
+                    }
+                ],
+                "description": "get category by id",
+                "parameters": [
+                    {
+                        "required": true,
+                        "name": "categoryId",
+                        "description": "category id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success put",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
                                                         "type": "number"
                                                     },
                                                     "nama": {
@@ -238,7 +606,7 @@
                 }
             }
         },
-        "/products/{category_id}": {
+        "/category/{category_id}/products": {
             "get": {
                 "security": [
                     {
@@ -279,7 +647,7 @@
                                                     "id": {
                                                         "type": "number"
                                                     },
-                                                    "category_id":{
+                                                    "category_id": {
                                                         "type": "number"
                                                     },
                                                     "nama": {

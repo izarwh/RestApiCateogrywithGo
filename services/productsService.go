@@ -13,55 +13,55 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type categoryService struct {
-	db                 *sql.DB
-	categoryRepository repository.CategoryRepositoryInterface
-	validator          *validator.Validate
+type productService struct {
+	db                *sql.DB
+	productRepository repository.ProductRepositoryInterface
+	validator         *validator.Validate
 }
 
-func NewCategoryService(db *sql.DB, catRepo repository.CategoryRepositoryInterface, valid validator.Validate) *categoryService {
-	return &categoryService{db, catRepo, &valid}
+func NewProductService(db *sql.DB, catRepo repository.ProductRepositoryInterface, valid validator.Validate) *productService {
+	return &productService{db, catRepo, &valid}
 }
 
-func (cs *categoryService) FindAll(ctx context.Context) []response.ResponseProducts {
+func (cs *productService) FindAll(ctx context.Context) []response.ResponseProducts {
 	tx, err := cs.db.BeginTx(ctx, nil)
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
 	if err != nil {
 		panic(err)
 	}
-	products := cs.categoryRepository.FindAll(ctx, tx)
+	products := cs.productRepository.FindAll(ctx, tx)
 	var responseCategories []response.ResponseProducts
 	for _, prod := range products {
 		responseCategories = append(responseCategories, *prod.ToResponseProducts())
 	}
 	return responseCategories
 }
-func (cs *categoryService) FindById(ctx context.Context, id int) response.ResponseProducts {
+func (cs *productService) FindById(ctx context.Context, id int) response.ResponseProducts {
 	tx, err := cs.db.BeginTx(ctx, nil)
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
 	// if err != nil {
 	// 	panic(err)
 	// }
-	categoryById := cs.categoryRepository.FindById(ctx, tx, id)
+	categoryById := cs.productRepository.FindById(ctx, tx, id)
 	return *categoryById.ToResponseProducts()
 }
-func (cs *categoryService) FindByCategoryId(ctx context.Context, catId int) []response.ResponseProducts {
+func (cs *productService) FindByCategoryId(ctx context.Context, catId int) []response.ResponseProducts {
 	tx, err := cs.db.BeginTx(ctx, nil)
 	helper.PanicIfError(err)
 	// defer helper.CommitOrRollback(tx)
 	// if err != nil {
 	// 	panic(err)
 	// }
-	categories := cs.categoryRepository.FindByCategoryId(ctx, tx, catId)
+	categories := cs.productRepository.FindByCategoryId(ctx, tx, catId)
 	var responseCategories []response.ResponseProducts
 	for _, cat := range categories {
 		responseCategories = append(responseCategories, *cat.ToResponseProducts())
 	}
 	return responseCategories
 }
-func (cs *categoryService) Delete(ctx context.Context, req request.RequestDeleteProducts) response.ResponseProducts {
+func (cs *productService) Delete(ctx context.Context, req request.RequestDeleteProducts) response.ResponseProducts {
 	err := cs.validator.Struct(req)
 	if err != nil {
 		panic(err)
@@ -72,12 +72,12 @@ func (cs *categoryService) Delete(ctx context.Context, req request.RequestDelete
 	// if err != nil {
 	// 	panic(err)
 	// }
-	catToDelete := cs.categoryRepository.FindById(ctx, tx, req.Id)
+	catToDelete := cs.productRepository.FindById(ctx, tx, req.Id)
 	fmt.Println(catToDelete)
-	cs.categoryRepository.Delete(ctx, tx, catToDelete)
+	cs.productRepository.Delete(ctx, tx, catToDelete)
 	return *catToDelete.ToResponseProducts()
 }
-func (cs *categoryService) Update(ctx context.Context, req request.RequestUpdateProducts) response.ResponseProducts {
+func (cs *productService) Update(ctx context.Context, req request.RequestUpdateProducts) response.ResponseProducts {
 	err := cs.validator.Struct(req)
 	if err != nil {
 		panic(err)
@@ -88,13 +88,13 @@ func (cs *categoryService) Update(ctx context.Context, req request.RequestUpdate
 	// if err != nil {
 	// 	panic(err)
 	// }
-	catToUpdate := cs.categoryRepository.FindById(ctx, tx, req.Id)
+	catToUpdate := cs.productRepository.FindById(ctx, tx, req.Id)
 	catToUpdate.SetCategoryId(&req.CategoryId)
 	catToUpdate.SetName(&req.Name)
-	cs.categoryRepository.Update(ctx, tx, catToUpdate)
+	cs.productRepository.Update(ctx, tx, catToUpdate)
 	return *catToUpdate.ToResponseProducts()
 }
-func (cs *categoryService) Create(ctx context.Context, req request.RequestCreateProducts) response.ResponseProducts {
+func (cs *productService) Create(ctx context.Context, req request.RequestCreateProducts) response.ResponseProducts {
 	err := cs.validator.Struct(req)
 	if err != nil {
 		panic(err)
@@ -110,6 +110,6 @@ func (cs *categoryService) Create(ctx context.Context, req request.RequestCreate
 	var reqToDomain domain.Products
 	reqToDomain.SetCategoryId(&req.CategoryId)
 	reqToDomain.SetName(&req.Name)
-	resDomain := cs.categoryRepository.Create(ctx, tx, reqToDomain)
+	resDomain := cs.productRepository.Create(ctx, tx, reqToDomain)
 	return *resDomain.ToResponseProducts() //Data yang diinput harus berupa json
 }

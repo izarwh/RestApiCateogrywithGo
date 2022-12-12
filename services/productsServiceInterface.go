@@ -6,7 +6,7 @@ import (
 	"prrestapi/model/response"
 )
 
-type ServiceCategory interface {
+type ServiceProducts interface {
 	FindAll(ctx context.Context) []response.ResponseProducts
 	FindById(ctx context.Context, id int) response.ResponseProducts
 	FindByCategoryId(ctx context.Context, catId int) []response.ResponseProducts
