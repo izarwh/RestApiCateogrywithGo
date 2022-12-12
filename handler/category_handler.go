@@ -56,7 +56,7 @@ func (handler *categoryHandler) FindByCategoryId(c echo.Context) error {
 	})
 }
 func (handler *categoryHandler) Delete(c echo.Context) error {
-	requestDeleteCategory := new(request.RequestDeleteCategory)
+	requestDeleteCategory := new(request.RequestDeleteProducts)
 	c.Bind(requestDeleteCategory)
 	response := handler.categoryservice.Delete(c.Request().Context(), *requestDeleteCategory)
 	return c.JSON(http.StatusOK, api.ApiResponse{
@@ -67,7 +67,7 @@ func (handler *categoryHandler) Delete(c echo.Context) error {
 }
 func (handler *categoryHandler) Update(c echo.Context) error {
 
-	requestUpdateCategory := new(request.RequestUpdateCategory)
+	requestUpdateCategory := new(request.RequestUpdateProducts)
 	c.Bind(requestUpdateCategory)
 	response := handler.categoryservice.Update(c.Request().Context(), *requestUpdateCategory)
 	return c.JSON(http.StatusOK, api.ApiResponse{
@@ -78,7 +78,7 @@ func (handler *categoryHandler) Update(c echo.Context) error {
 }
 func (handler *categoryHandler) Create(c echo.Context) error {
 	// fmt.Println("testHandler")
-	requestCreateCategory := new(request.RequestCreateCategory)
+	requestCreateCategory := new(request.RequestCreateProducts)
 	c.Bind(requestCreateCategory)
 	fmt.Println(requestCreateCategory.CategoryId)
 	response := handler.categoryservice.Create(c.Request().Context(), *requestCreateCategory)

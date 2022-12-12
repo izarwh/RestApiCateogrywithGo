@@ -23,21 +23,21 @@ func NewCategoryService(db *sql.DB, catRepo repository.CategoryRepositoryInterfa
 	return &categoryService{db, catRepo, &valid}
 }
 
-func (cs *categoryService) FindAll(ctx context.Context) []response.ResponseCategory {
+func (cs *categoryService) FindAll(ctx context.Context) []response.ResponseProducts {
 	tx, err := cs.db.BeginTx(ctx, nil)
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
 	if err != nil {
 		panic(err)
 	}
-	categories := cs.categoryRepository.FindAll(ctx, tx)
-	var responseCategories []response.ResponseCategory
-	for _, cat := range categories {
-		responseCategories = append(responseCategories, *cat.ToResponseCategory())
+	products := cs.categoryRepository.FindAll(ctx, tx)
+	var responseCategories []response.ResponseProducts
+	for _, prod := range products {
+		responseCategories = append(responseCategories, *prod.ToResponseProducts())
 	}
 	return responseCategories
 }
-func (cs *categoryService) FindById(ctx context.Context, id int) response.ResponseCategory {
+func (cs *categoryService) FindById(ctx context.Context, id int) response.ResponseProducts {
 	tx, err := cs.db.BeginTx(ctx, nil)
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
@@ -45,9 +45,9 @@ func (cs *categoryService) FindById(ctx context.Context, id int) response.Respon
 	// 	panic(err)
 	// }
 	categoryById := cs.categoryRepository.FindById(ctx, tx, id)
-	return *categoryById.ToResponseCategory()
+	return *categoryById.ToResponseProducts()
 }
-func (cs *categoryService) FindByCategoryId(ctx context.Context, catId int) []response.ResponseCategory {
+func (cs *categoryService) FindByCategoryId(ctx context.Context, catId int) []response.ResponseProducts {
 	tx, err := cs.db.BeginTx(ctx, nil)
 	helper.PanicIfError(err)
 	// defer helper.CommitOrRollback(tx)
@@ -55,13 +55,13 @@ func (cs *categoryService) FindByCategoryId(ctx context.Context, catId int) []re
 	// 	panic(err)
 	// }
 	categories := cs.categoryRepository.FindByCategoryId(ctx, tx, catId)
-	var responseCategories []response.ResponseCategory
+	var responseCategories []response.ResponseProducts
 	for _, cat := range categories {
-		responseCategories = append(responseCategories, *cat.ToResponseCategory())
+		responseCategories = append(responseCategories, *cat.ToResponseProducts())
 	}
 	return responseCategories
 }
-func (cs *categoryService) Delete(ctx context.Context, req request.RequestDeleteCategory) response.ResponseCategory {
+func (cs *categoryService) Delete(ctx context.Context, req request.RequestDeleteProducts) response.ResponseProducts {
 	err := cs.validator.Struct(req)
 	if err != nil {
 		panic(err)
@@ -75,9 +75,9 @@ func (cs *categoryService) Delete(ctx context.Context, req request.RequestDelete
 	catToDelete := cs.categoryRepository.FindById(ctx, tx, req.Id)
 	fmt.Println(catToDelete)
 	cs.categoryRepository.Delete(ctx, tx, catToDelete)
-	return *catToDelete.ToResponseCategory()
+	return *catToDelete.ToResponseProducts()
 }
-func (cs *categoryService) Update(ctx context.Context, req request.RequestUpdateCategory) response.ResponseCategory {
+func (cs *categoryService) Update(ctx context.Context, req request.RequestUpdateProducts) response.ResponseProducts {
 	err := cs.validator.Struct(req)
 	if err != nil {
 		panic(err)
@@ -92,9 +92,9 @@ func (cs *categoryService) Update(ctx context.Context, req request.RequestUpdate
 	catToUpdate.SetCategoryId(&req.CategoryId)
 	catToUpdate.SetName(&req.Name)
 	cs.categoryRepository.Update(ctx, tx, catToUpdate)
-	return *catToUpdate.ToResponseCategory()
+	return *catToUpdate.ToResponseProducts()
 }
-func (cs *categoryService) Create(ctx context.Context, req request.RequestCreateCategory) response.ResponseCategory {
+func (cs *categoryService) Create(ctx context.Context, req request.RequestCreateProducts) response.ResponseProducts {
 	err := cs.validator.Struct(req)
 	if err != nil {
 		panic(err)
@@ -107,9 +107,9 @@ func (cs *categoryService) Create(ctx context.Context, req request.RequestCreate
 	// 	panic(err)
 	// }
 	fmt.Println(req)
-	var reqToDomain domain.Category
+	var reqToDomain domain.Products
 	reqToDomain.SetCategoryId(&req.CategoryId)
 	reqToDomain.SetName(&req.Name)
 	resDomain := cs.categoryRepository.Create(ctx, tx, reqToDomain)
-	return *resDomain.ToResponseCategory() //Data yang diinput harus berupa json
+	return *resDomain.ToResponseProducts() //Data yang diinput harus berupa json
 }
